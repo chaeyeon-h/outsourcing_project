@@ -34,37 +34,37 @@ class MainUi:
         LoginPageTextList=["id","pw"]
         for index in range(0,len(LoginPageTextList)):
             LoginPageLogo = QtWidgets.QLabel(self.LoginPage)
-            LoginPageLogo.setGeometry(280,460+(index*60),100,40)
+            LoginPageLogo.setGeometry(320,460+(index*60),60,40)
             LoginPageLogo.setText(LoginPageTextList[index])
             font = QtGui.QFont()
-            font.setFamily("HY 견고딕")
-            font.setPixelSize(12)
+            font.setFamily("맑은 고딕")
+            font.setPixelSize(15)
             LoginPageLogo.setFont(font)
             
         self.LoginPageEditList=[]
         for index in range(0,2):
             LoginPageEdit= QtWidgets.QLineEdit(self.LoginPage)
-            LoginPageEdit.setGeometry(380,460+(index*60),450,40)
+            LoginPageEdit.setGeometry(450,460+(index*60),400,40)
             LoginPageEdit.setStyleSheet("border: 1.25px solid red;")
             self.LoginPageEditList.append(LoginPageEdit)
             if index==1:
-                self.LoginPageEditList[index].setEchoMode(QtWidgets.QLineEdit.PasswordEchoOnEdit)
+                self.LoginPageEditList[index].setEchoMode(QtWidgets.QLineEdit.Password)
 #########
         self.LoginPageBtnNameList=["로그인","회원가입","아이디/비밀번호 찾기"]
         self.LoginPageBtnList=[]
         for index in range(0,len(self.LoginPageBtnNameList)):
             LoginPageBtn= QtWidgets.QPushButton(self.LoginPage)
-            LoginPageBtn.setGeometry(QtCore.QRect(400,610+(index*60),380,40))
+            LoginPageBtn.setGeometry(QtCore.QRect(280+(index*210),610,190,40))
             LoginPageBtn.setStyleSheet("background-color: #FFD5D5; ")
             font = QtGui.QFont()            
-            font.setFamily("HY 견고딕")
+            font.setFamily("맑은 고딕")
             LoginPageBtn.setFont(font)
             LoginPageBtn.setText(self.LoginPageBtnNameList[index])
             LoginPageBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
             self.LoginPageBtnList.append(LoginPageBtn)
 #########
         LoginPageLogo = QtWidgets.QLabel(self.LoginPage)
-        LoginPageLogo.setGeometry(QtCore.QRect(490, 140, 200, 200))
+        LoginPageLogo.setGeometry(QtCore.QRect(500, 150, 200, 200))
         font = QtGui.QFont()
         font.setPixelSize(200) 
         LoginPageLogo.setFont(font)
@@ -98,17 +98,20 @@ class MainUi:
             JoinPageLabel= QtWidgets.QLabel(self.JoinPage)
             JoinPageLabel.setGeometry(280,250+(index*100),100,40)
             font = QtGui.QFont()
+            font.setFamily("맑은 고딕")
             font.setPixelSize(13)
             JoinPageLabel.setFont(font)
             JoinPageLabel.setText(self.JoinPageLabelNameList[index])
             self.JoinPageLabelList.append(JoinPageLabel)
 #########
         JoinPageJoinBtn = QtWidgets.QPushButton(self.JoinPage)
-        JoinPageJoinBtn.setGeometry(QtCore.QRect(400, 710, 400, 40))
+        JoinPageJoinBtn.setGeometry(QtCore.QRect(380, 680, 400, 40))
         font = QtGui.QFont()
+        font.setFamily("맑은 고딕")
         JoinPageJoinBtn.setStyleSheet("background-color: #FFD5D5; ")
         JoinPageJoinBtn.setFont(font)
         JoinPageJoinBtn.setText("가입")
+        
         JoinPageJoinBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         JoinPageJoinBtn.setObjectName("JoinPageJoinBtn")
         
@@ -116,6 +119,7 @@ class MainUi:
         JoinPageIdCheckBtn.setGeometry(QtCore.QRect(780,250,50,40))
         JoinPageIdCheckBtn.setStyleSheet("background-color: red; ")
         font = QtGui.QFont()
+        font.setFamily("맑은 고딕")
         JoinPageIdCheckBtn.setFont(font)
         JoinPageIdCheckBtn.setText("확인")
         JoinPageIdCheckBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -155,7 +159,7 @@ class MainUi:
         self.chooseBoxBtn.setGeometry(100,150, 1000, 700)
         font = QtGui.QFont()
         font.setPointSize(11)
-        font.setFamily("나눔고딕")
+        font.setFamily("맑은 고딕")
         self.chooseBoxBtn.setFont(font)
 
         self.chooseBoxBtn.addTab(self.findId,"id")
@@ -183,6 +187,7 @@ class MainUi:
         self.FindIdOkBtn.setGeometry(270,420,450,40)
         self.FindIdOkBtn.setText("확인")
         font = QtGui.QFont()
+        font.setFamily("맑은 고딕")
         font.setPixelSize(13)
         self.FindIdOkBtn.setStyleSheet("background-color: #FFD5D5; ")
         self.FindIdOkBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -194,15 +199,16 @@ class MainUi:
         for index in range(0,3):
 
             FindPwPageLabel= QtWidgets.QLabel(self.findPw)
-            FindPwPageLabel.setGeometry(200,200+(index*100),100,40)
+            FindPwPageLabel.setGeometry(200,170+(index*100),100,40)
             font = QtGui.QFont()
             font.setPixelSize(13)
+            font.setFamily("맑은 고딕")
             FindPwPageLabel.setFont(font)
             FindPwPageLabel.setText(self.FindPwPageLabelNameList[index])
             self.FindPwPageLabelList.append(FindPwPageLabel)
 
             FindPwPageEdit= QtWidgets.QLineEdit(self.findPw)
-            FindPwPageEdit.setGeometry(300,200+(index*100),450,40)
+            FindPwPageEdit.setGeometry(300,170+(index*100),450,40)
             FindPwPageEdit.setStyleSheet("border: 1px solid red; border-radius : 1px;")
             self.FindPwPageEditList.append(FindPwPageEdit)
       
@@ -210,6 +216,7 @@ class MainUi:
         self.FindPwOkBtn.setGeometry(270,520,450,40)
         self.FindPwOkBtn.setText("확인")
         font = QtGui.QFont()
+        font.setFamily("맑은 고딕")
         font.setPixelSize(13)
         self.FindPwOkBtn.setStyleSheet("background-color: #FFD5D5; ")
         self.FindPwOkBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -270,7 +277,7 @@ class MainUi:
             PlayListMoveToVideoBtn.setStyleSheet("border-style:solid; border-color: red; border-width: 1.25px;")
             PlayListMoveToVideoBtn.setFixedHeight(80)
             font = QtGui.QFont()
-            font.setFamily("HY견고딕")
+            font.setFamily("맑은 고딕")
             font.setPixelSize(14)
             PlayListMoveToVideoBtn.setFont(font)
             PlayListMoveToVideoBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -279,10 +286,10 @@ class MainUi:
         
         for index in range(0,20):
             PlayListChangeBtn= QtWidgets.QPushButton(self.scrollBox)
-            PlayListChangeBtn.setGeometry(QtCore.QRect(925,10+(index*86),60,80))
+            PlayListChangeBtn.setGeometry(QtCore.QRect(925,11+(index*86),60,80))
 
             PlayListDeleteBtn= QtWidgets.QPushButton(self.scrollBox)
-            PlayListDeleteBtn.setGeometry(QtCore.QRect(990,10+(index*86),60,80))
+            PlayListDeleteBtn.setGeometry(QtCore.QRect(990,11+(index*86),60,80))
 
             PlayListChangeBtn.setStyleSheet("background-color: red;")
             PlayListDeleteBtn.setStyleSheet("background-color: red;")
@@ -341,68 +348,78 @@ class MainUi:
         VideoListBorder.setStyleSheet("background-color: white ;border-style:solid; border-color: red; border-width: 3px;")
 #########
         self.scrollArea = QtWidgets.QScrollArea(self.VideoListPage)
-        self.scrollArea.setGeometry(QtCore.QRect(60,450,1080,400))
+        self.scrollArea.setGeometry(QtCore.QRect(720,30,450,840))
         self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
 
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(60,450,1080,400))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(720,30,450,840))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         
         self.scrollBox = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
-        self.scrollBox.setGeometry(QtCore.QRect(60,450,1080,400))
+        self.scrollBox.setGeometry(QtCore.QRect(720,30,450,840))
         self.scrollBox.setObjectName("scrollBox")
 
         self.Layout = QtWidgets.QVBoxLayout(self.scrollBox)
-        self.Layout.setContentsMargins(10, 10, 135, 300)
-        
-        self.Layout.setObjectName("verticalLayout")
+        self.Layout.setContentsMargins(120, 50, 60, 50)
+        self.Layout.setObjectName("Layout")
+
 #########      
         self.VideoListNum=0
         self.VideoPageList=[]
         self.VideoPageDeleteBtnList=[]
-        self.VideoPageChangeBtnList=[]
+        self.VideoListPicList=[]
 
 #Videolistnum으로 범위수정해줘야함
         for index in range(0,20):
-            VideoListMoveToVideoBtn= QtWidgets.QPushButton(self.scrollBox)
-            VideoListMoveToVideoBtn.setStyleSheet("border-style:solid; border-color: red; border-width: 1.25px;")
-            VideoListMoveToVideoBtn.setFixedHeight(70)
+
+            VideoListLabel= QtWidgets.QLabel(self.scrollBox)
+            VideoListLabel.setStyleSheet("border-style:solid; border-color: red; border-width: 1.25px;")
+            VideoListLabel.setFixedHeight(70)
             font = QtGui.QFont()
             font.setPixelSize(14)
-            VideoListMoveToVideoBtn.setFont(font)
-            VideoListMoveToVideoBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-            self.VideoPageList.append(VideoListMoveToVideoBtn)
-            self.Layout.addWidget(VideoListMoveToVideoBtn)
+            font.setFamily("맑은 고딕")
+            VideoListLabel.setFont(font)
+            VideoListLabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.VideoPageList.append(VideoListLabel)
+            self.Layout.addWidget(VideoListLabel)
+
+            
         
         for index in range(0,20):
-            VideoListChangeBtn= QtWidgets.QPushButton(self.scrollBox)
-            VideoListChangeBtn.setGeometry(QtCore.QRect(925,11+(index*76),60,70))
-
             VideoListDeleteBtn= QtWidgets.QPushButton(self.scrollBox)
-            VideoListDeleteBtn.setGeometry(QtCore.QRect(990,11+(index*76),60,70))
-
-            VideoListChangeBtn.setStyleSheet("background-color: red;")
+            VideoListDeleteBtn.setGeometry(QtCore.QRect(370,51+(index*76),40,70))
             VideoListDeleteBtn.setStyleSheet("background-color: red;")
-
             font = QtGui.QFont()
             font.setPixelSize(13)
-
-            VideoListChangeBtn.setFont(font)
+            font.setFamily("맑은 고딕")
             VideoListDeleteBtn.setFont(font)
-
-            VideoListChangeBtn.setText("수정")
             VideoListDeleteBtn.setText("삭제")
-
-            VideoListChangeBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
             VideoListDeleteBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-
-            self.VideoPageChangeBtnList.append(VideoListChangeBtn)
             self.VideoPageDeleteBtnList.append(VideoListDeleteBtn)
+
+            
+            VideoListPic= QtWidgets.QPushButton(self.scrollBox)
+            VideoListPic.setGeometry(QtCore.QRect(10,51+(index*76),112,70))
+            VideoListPic.setStyleSheet("border-style:solid; border-color: red; border-width: 1.25px;")
+            VideoListPic.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.VideoListPicList.append(VideoListPic)
     
         self.scrollBox.setLayout(self.Layout)
         self.scrollArea.setWidget(self.scrollBox)
+
+        self.VideoListAddBtn= QtWidgets.QPushButton(self.scrollBox)
+        self.VideoListAddBtn.setGeometry(QtCore.QRect(310,5,100,40))
+        self.VideoListAddBtn.setStyleSheet("background-color: red;")
+        font = QtGui.QFont()
+        font.setPixelSize(13)
+        font.setFamily("맑은 고딕")
+        self.VideoListAddBtn.setFont(font)
+        self.VideoListAddBtn.setText("영상 추가")
+        self.VideoListAddBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
+
 #########
 #########
         self.VideoListPageBackBtn = QtWidgets.QPushButton(self.VideoListPage)
@@ -420,7 +437,7 @@ class MainUi:
         self.VideoPlayBtnList=[]
         for index in range(0,len(self.VideoPlayBtnNameList)):
             VideoBtn= QtWidgets.QPushButton(self.VideoListPage)
-            VideoBtn.setGeometry(QtCore.QRect(1050, 140+(index*80), 70, 40))
+            VideoBtn.setGeometry(QtCore.QRect(220+(index*90), 640, 60, 40))
             VideoBtn.setStyleSheet("background-color:#FF3232")
             font = QtGui.QFont()
             font.setPixelSize(12)
@@ -450,7 +467,7 @@ class MainUi:
         self.LabelDialog.setGeometry(QtCore.QRect(100, 100, 400, 400))
         font = QtGui.QFont()
         font.setPointSize(13)
-        font.setFamily("나눔고딕")
+        font.setFamily("맑은 고딕")
         self.LabelDialog.setFont(font)
         self.LabelDialog.setAlignment(QtCore.Qt.AlignCenter)
         self.LabelDialog.setObjectName("LabelDialog")
@@ -460,6 +477,32 @@ class MainUi:
         dialog=QtWidgets.QDialog()
         self.dialog(dialog,text)
         dialog.exec()
+
+    def messageBox(self,text,ment):
+
+        # ment는 list형태로 (""에 성공하셨습니다, ""에 실패하셨습니다)
+
+        self.MessageBox = QtWidgets.QMessageBox()
+        self.MessageBox.setWindowTitle("MessageBox")
+        self.MessageBox.setText(text)
+        self.MessageBox.setStandardButtons(QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel)
+        retval=self.MessageBox.exec()
+        
+        if retval == QtWidgets.QMessageBox.Ok :
+            self.resultDialog(ment[0])
+        
+        elif retval == QtWidgets.QMessageBox.Cancel:
+            self.resultDialog(ment[1])
+
+    def InPutDialog(self,text,ment):
+        
+        self.dialog, ok = QtWidgets.QInputDialog.getText(self,"Dialog",text)
+        
+        if ok :
+            self.resultDialog(ment[0])
+        else:
+            self.resultDialog(ment[1])
+
 
 ###################################################################################################################
 

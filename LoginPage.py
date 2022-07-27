@@ -37,12 +37,9 @@ class LoginPage:
             self.ui.resultDialog("로그인 실패")
 
 
-
     def textClear(self):
         for index in range(0, len(self.ui.LoginPageEditList)):
             self.ui.LoginPageEditList[index].setText("")
-
-
 
 
 #####################################################################
