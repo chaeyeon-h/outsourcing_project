@@ -8,9 +8,9 @@ class DataBase:
 
         self.connect1=sqlite3.connect("UserData.db")
         self.cursor1=self.connect1.cursor()
-        self.cursor1.execute("CREATE TABLE IF NOT EXISTS user ( INTEGER PRIMARY KEY, id TEXT , pw TEXT, name TEXT, contact TEXT)")
-        self.cursor1.execute("CREATE TABLE IF NOT EXISTS playlist ( INTEGER PRIMARY KEY, id TEXT, PLAYLIST TEXT  )")
-        self.cursor1.execute("CREATE TABLE IF NOT EXISTS videolist ( INTEGER PRIMARY KEY, id TEXT, VIDEOLIST TEXT  )")
+        self.cursor1.execute("CREATE TABLE IF NOT EXISTS user ( num INTEGER PRIMARY KEY, id TEXT , pw TEXT, name TEXT, contact TEXT )")
+        self.cursor1.execute("CREATE TABLE IF NOT EXISTS playlist ( num INTEGER PRIMARY KEY, id TEXT, listname TEXT )")
+        self.cursor1.execute("CREATE TABLE IF NOT EXISTS videolist ( num INTEGER PRIMARY KEY, id TEXT, listname TEXT, listlink TEXT, linkname TEXT)")
 
 ###########################################################################################
 
@@ -46,21 +46,25 @@ class DataBase:
     def update(self,tableName,column,values):
         value=[] 
         ment="UPDATE "+tableName+" SET "
-        for i in range(1,len(column)):
+        for i in range(2,len(column)):
             ment+=column[i]+"=?"
             if i!=len(column)-1:
                 ment+=", "
             value.append(values[i])
       
-        ment+= " WHERE "+ column[0]+"= '"+ values[0] +"'"
+        ment+= " WHERE "+ column[0]+"= '"+ values[0] +"' AND "+ column[1]+"= '"+ values[1] +"'"
         self.cursor1.execute(ment,value)
         self.connect1.commit()
 
 ###########################################################################################
 
     def delete(self,tableName,column,values): 
-        ment="DELETE FROM "
-        ment+=tableName+" WHERE "+str(column)+"="+str(values)+";"
+        ment="DELETE FROM " + tableName+" WHERE "
+        for i in range(0,len(column)):
+            ment+=str(column[i])+"= '"+str(values[i])+"'"
+            if i!=len(column)-1:
+                ment+=" AND "
+
         print(ment)
         self.cursor1.execute(ment)
         self.connect1.commit()
