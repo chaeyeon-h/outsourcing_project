@@ -15,10 +15,8 @@ class FindPage:
             self.findId()
         elif index==1:
             self.findPw()
-            self.ui.messageBox( "정말로 찾겠습니까",["예","아니요"])
         elif index==2:
             self.ui.stackedWidget.setCurrentWidget(self.ui.LoginPage)
-            # self.ui.FindPageBtnList[index].clicked.disconnect()
 
     def findId(self):
         for i in range(0,len(self.ui.FindIdPageLabelNameList)):

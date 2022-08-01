@@ -239,7 +239,7 @@ class MainUi:
 
 ###################################################################################################################
 # playlistPage    
-
+    
         self.PlayListPage = QtWidgets.QWidget()
         self.PlayListPage.setObjectName("playListPage")
         self.PlayListPage.resize(1200,900)
@@ -247,13 +247,9 @@ class MainUi:
         playListBorder=QtWidgets.QLabel(self.PlayListPage)
         playListBorder.setGeometry(10,10,1180,880)
         playListBorder.setStyleSheet("background-color: white ;border-style:solid; border-color: red; border-width: 3px;")
-#########
+
 #########     
         self.PlayListNum=0
-        self.PlayPageMoveToVideoList=[]
-        self.PlayPageDeleteBtnList=[]
-        self.PlayPageChangeBtnList=[]
-
 #########
         self.playListPageBackBtn = QtWidgets.QPushButton(self.PlayListPage)
         self.playListPageBackBtn.setGeometry(QtCore.QRect(20, 20, 30, 30))
@@ -275,7 +271,7 @@ class MainUi:
         self.playListPageAddBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.playListPageAddBtn.setText("추가")
 
-
+   
 
         self.stackedWidget.addWidget(self.PlayListPage)
 
@@ -291,10 +287,6 @@ class MainUi:
         VideoListBorder.setStyleSheet("background-color: white ;border-style:solid; border-color: red; border-width: 3px;")
 #########      
         self.VideoListNum=0
-        self.VideoPageList=[]
-        self.VideoPageDeleteBtnList=[]
-        self.VideoListPicList=[]
-
 #########
         self.VideoListPageAddBtn = QtWidgets.QPushButton(self.VideoListPage)
         self.VideoListPageAddBtn.setGeometry(QtCore.QRect(470, 640, 60, 40))
@@ -330,6 +322,12 @@ class MainUi:
             VideoBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
             VideoBtn.setText(self.VideoPlayBtnNameList[index])
             self.VideoPlayBtnList.append(VideoBtn)
+        
+        self.videoPlay=QtWidgets.QFrame(self.VideoListPage)
+        self.videoPlay.setGeometry(40,90,660,440)
+        self.videoPlay.setStyleSheet("border: red 1px;" )
+        
+
 
         self.stackedWidget.addWidget(self.VideoListPage)
 
@@ -379,6 +377,7 @@ class MainUi:
         
 ###################################################################################################################
 
+#playlistnum으로 범위수정해줘야함
     def PlayListBtn(self,text):
 
         self.scrollArea = QtWidgets.QScrollArea(self.PlayListPage)
@@ -395,20 +394,28 @@ class MainUi:
         self.scrollBox.setGeometry(60,60,1080,780)
         self.scrollBox.setObjectName("scrollBox")
 
+        self.Layout = QtWidgets.QVBoxLayout(self.scrollBox)
+        self.Layout.setContentsMargins(10, 10, 135, 300)
+        self.Layout.setObjectName("verticalLayout")
+
+        self.PlayPageMoveToVideoList=[]
+        self.PlayPageDeleteBtnList=[]
+        self.PlayPageChangeBtnList=[]
+            
         for index in range(0,self.PlayListNum):
 
             PlayListMoveToVideoBtn= QtWidgets.QPushButton(self.scrollBox)
             PlayListMoveToVideoBtn.setStyleSheet("border-style:solid; border-color: red; border-width: 1.25px;")
-            PlayListMoveToVideoBtn.setGeometry(QtCore.QRect(10,11+(index*86),915,80))
             font = QtGui.QFont()
             font.setFamily("맑은 고딕")
             font.setPixelSize(14)
+            PlayListMoveToVideoBtn.setFixedHeight(80)
             PlayListMoveToVideoBtn.setFont(font)
             PlayListMoveToVideoBtn.setText(text[index])
             PlayListMoveToVideoBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
             self.PlayPageMoveToVideoList.append(PlayListMoveToVideoBtn)
+            self.Layout.addWidget(PlayListMoveToVideoBtn)
 
-        
             font = QtGui.QFont()
             font.setPixelSize(13)
 
@@ -427,8 +434,9 @@ class MainUi:
             PlayListDeleteBtn.setText("삭제")
             PlayListDeleteBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
             self.PlayPageDeleteBtnList.append(PlayListDeleteBtn)
- 
-            self.scrollArea.setWidget(self.scrollBox)
+            
+        self.scrollBox.setLayout(self.Layout)
+        self.scrollArea.setWidget(self.scrollBox)
         
 
     def VideoListBtn(self,text,image):
@@ -446,6 +454,10 @@ class MainUi:
         self.scrollBox = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
         self.scrollBox.setGeometry(QtCore.QRect(720,30,450,840))
         self.scrollBox.setObjectName("scrollBox")
+        
+        self.VideoPageList=[]
+        self.VideoPageDeleteBtnList=[]
+        self.VideoListPicList=[]
 
         for index in range(0,self.VideoListNum):
 
@@ -486,7 +498,7 @@ class MainUi:
             self.qPixmapVar.loadFromData(image[index])
             VideoListPic.setPixmap(self.qPixmapVar)
         
-            self.scrollArea.setWidget(self.scrollBox)
+        self.scrollArea.setWidget(self.scrollBox)
 
 
             

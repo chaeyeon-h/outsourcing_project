@@ -24,7 +24,10 @@ class VideoListPage:
         self.ui.VideoListPageAddBtn.clicked.connect(self.AddList)
 
         for i in range(0,len(self.ui.VideoPlayBtnNameList)):
-            self.ui.VideoPlayBtnList[i].clicked.connect(lambda event, nowIndex=i : self.referVideoPlay.PlayStopVideo(nowIndex))
+            try:    
+                self.ui.VideoPlayBtnList[i].clicked.connect(lambda event, nowIndex=i : self.referVideoPlay.PlayStopVideo(nowIndex))
+            except :
+                self.ui.resultDialog("재생할 영상을 먼저 선택해 주세요")
 
         for i in range(0,self.ui.VideoListNum):
             self.ui.VideoPageList[i].clicked.connect(lambda event, nowIndex=i : self.Play(nowIndex))
@@ -32,10 +35,11 @@ class VideoListPage:
 
     def backMove(self):
         self.ui.stackedWidget.setCurrentWidget(self.ui.PlayListPage)
-    
+
     def VideoListPrint(self):
         
         self.result=self.db.read("videolist",["id","listname"],[self.id,self.listname])
+        print(self.result)
         
         for i in range(0,len(self.result)):
             self.linkname.append(self.result[i][4])
@@ -57,11 +61,12 @@ class VideoListPage:
                 self.url=self.ui.input
                 video=pafy.new(self.url)
                 name=f"{video.title}"
-                self.result=self.db.read("videolist",["listname"],[self.url])
-                if len(name)>30:
-                    name=name[:29]+"..."
-
+                self.result=self.db.read("videolist",["listname","listlink"],[self.listname,self.url])
+                
+                
                 if len(self.result)==0:
+                    if len(name)>25:
+                        name=name[:24]+"..."
                     self.linkname.append(self.url)
                     self.imageFromWeb = urllib.request.urlopen(self.url).read()
                     

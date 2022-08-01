@@ -12,6 +12,7 @@ class PlayListPage:
         
         self.PlayListPrint()
 
+    def PlayListBtnEvent(self):
         for i in range(0,self.ui.PlayListNum):
             self.ui.PlayPageMoveToVideoList[i].clicked.connect(lambda event, nowIndex=i : self.MoveToVideoPage(nowIndex))
             self.ui.PlayPageChangeBtnList[i].clicked.connect(lambda event, nowIndex=i : self.ChangeClickEvent(nowIndex))
@@ -23,10 +24,13 @@ class PlayListPage:
     def PlayListPrint(self):
         self.listname=[]
         self.result=self.db.read("playlist",["id"],[self.id])
+        self.ui.PlayListNum=len(self.result)
+        print(self.result)
         for i in range(0,len(self.result)):
             self.listname.append(self.result[i][2])
-        self.ui.PlayListNum=len(self.result)
         self.ui.PlayListBtn(self.listname)
+        self.PlayListBtnEvent()
+        
     
     def AddList(self):
         text="추가하실 재생목록의 이름을 작성해주세요"
@@ -34,11 +38,13 @@ class PlayListPage:
 
         if self.ui.ok:
             self.text=self.ui.input 
-            self.result=self.db.read("playlist",["listname"],[self.text])
+            self.result=self.db.read("playlist",["id","listname"],[self.id,self.text])
+            print(self.result)
             if len(self.text)<20:
                 if len(self.result)==0:
+                    print(self.ui.PlayListNum)
+                    print(self.result)
                     self.db.insert("playlist",["id","listname"],[self.id,self.text])
-                    self.listname.append(self.text)
                     self.ui.PlayListNum+=1
                     self.ui.resultDialog("추가에 성공하셨습니다")
                     self.PlayListPrint()
@@ -76,6 +82,7 @@ class PlayListPage:
                 if len(self.resultListName)==0:
                     listname=self.result[index][2]
                     self.db.update("playlist",["listname","id","listname"],[listname,self.id,self.text])
+                    self.db.update("videolist",["id","listname","listname"],[self.id,listname,self.text])
                     self.ui.PlayPageMoveToVideoList[index].setText(self.text)
                     self.ui.resultDialog("수정에 성공하셨습니다")
                     self.PlayListPrint()
@@ -85,7 +92,8 @@ class PlayListPage:
                 self.ui.resultDialog("재생목록의 길이는 20자 미만입니다.")
 
     def MoveToVideoPage(self,index):
-        self.listname=self.result[index][1]
+        self.listname=self.result[index][2]
+        print(self.listname)
         self.referVideoListPage=VideoListPage.VideoListPage(self.ui, self.id, self.listname)
         self.ui.stackedWidget.setCurrentWidget(self.ui.VideoListPage)
 
