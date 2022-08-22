@@ -10,7 +10,8 @@ class DataBase:
         self.cursor1=self.connect1.cursor()
         self.cursor1.execute("CREATE TABLE IF NOT EXISTS user ( num INTEGER PRIMARY KEY, id TEXT , pw TEXT, name TEXT, contact TEXT )")
         self.cursor1.execute("CREATE TABLE IF NOT EXISTS playlist ( num INTEGER PRIMARY KEY, id TEXT, listname TEXT )")
-        self.cursor1.execute("CREATE TABLE IF NOT EXISTS videolist ( num INTEGER PRIMARY KEY, id TEXT, listname TEXT, listlink TEXT, linkname TEXT)")
+        # num을 foriegn key로 받으면 id 필요없음 왜냐면 pk 값 안겹치니까 < ex) id=>123 인사람이 1을 가져감 id=> 234 인 사람이 2를 가져감 >
+        self.cursor1.execute("CREATE TABLE IF NOT EXISTS videolist ( num INTEGER PRIMARY KEY, numfromplaylist TEXT, listlink TEXT, linkname TEXT, imagelink TEXT, videotime INTEGER, FOREIGN KEY (numfromplaylist) REFERENCES user (num) )")
 
 ###########################################################################################
 
@@ -43,17 +44,22 @@ class DataBase:
 
 ###########################################################################################
 
-    def update(self,tableName,column,values):
+    def update(self,tableName,column1,column2,values):
         value=[] 
         ment="UPDATE "+tableName+" SET "
-        for i in range(2,len(column)):
-            ment+=column[i]+"=?"
-            if i!=len(column)-1:
+        for i in range(0,len(column1)):
+            ment+=column1[i]+"=? "
+            if i!=len(column1)-1:
                 ment+=", "
-            value.append(values[i])
-      
-        ment+= " WHERE "+ column[0]+"= '"+ values[0] +"' AND "+ column[1]+"= '"+ values[1] +"'"
-        self.cursor1.execute(ment,value)
+
+        ment+="WHERE "
+        for i in range(0,len(column2)):
+            ment+=column2[i]+"=?"
+            if i!=len(column2)-1:
+                ment+=" AND "
+        
+        print(ment)
+        self.cursor1.execute(ment,values)
         self.connect1.commit()
 
 ###########################################################################################

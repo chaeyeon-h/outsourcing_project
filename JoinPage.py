@@ -8,7 +8,7 @@ class JoinPage:
         self.check=0
 
         for index in range(0, len(self.ui.JoinPageBtnList)):
-            self.ui.JoinPageBtnList[index].clicked.connect(lambda event, nowIndex=index : self.clickEvent(nowIndex))
+            self.ui.JoinPageBtnList[index].mousePressEvent= lambda event, nowIndex=index : self.clickEvent(nowIndex)
             
         self.ui.JoinPageEditList[0].textChanged[str].connect(self.Changed)
     
@@ -23,8 +23,7 @@ class JoinPage:
         elif index==2:
             self.ui.stackedWidget.setCurrentWidget(self.ui.LoginPage)
             for index in range(0, len(self.ui.JoinPageBtnList)):
-                #disconnect 된건지 확인     
-                self.ui.JoinPageBtnList[index].clicked.disconnect()
+                self.ui.JoinPageBtnList[index].mousePressEvent= None
             
     def idCheck(self):
 
@@ -81,4 +80,4 @@ class JoinPage:
 
     def textClear(self):
         for i in range(0, len(self.ui.JoinPageEditList)):
-            self.ui.JoinPageEditList[i].setText("")
+            self.ui.JoinPageEditList[i].clear()

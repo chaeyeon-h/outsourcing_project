@@ -7,13 +7,14 @@ class LoginPage:
     def __init__(self):
         self.db=DataBase.DataBase()
         self.ui=MainUi.MainUi()
+
         for index in range(0, len(self.ui.LoginPageBtnList)):
-            self.ui.LoginPageBtnList[index].clicked.connect(lambda event, nowIndex=index : self.clickEvent(nowIndex))
+            self.ui.LoginPageBtnList[index].mousePressEvent=lambda event, nowIndex=index : self.clickEvent(nowIndex)
         
     def clickEvent(self,index):
         if index==0:
             self.login()
-        elif index==1:
+        elif index==1:  
             self.referJoinPage=JoinPage.JoinPage(self.ui)
             self.ui.stackedWidget.setCurrentWidget(self.ui.JoinPage)
         elif index==2:
@@ -30,17 +31,15 @@ class LoginPage:
         result=self.db.read("user",["id","pw"],info)
 
         if len(result)!=0:
-            self.ui.resultDialog("로그인 성공")
             self.referPlayListPage=PlayListPage.PlayListPage(self.ui,info[0])
             self.ui.stackedWidget.setCurrentWidget(self.ui.PlayListPage)
-        else:
+        else:   
             self.ui.resultDialog("로그인 실패")
 
 
     def textClear(self):
         for index in range(0, len(self.ui.LoginPageEditList)):
-            self.ui.LoginPageEditList[index].setText("")
-
+            self.ui.LoginPageEditList[index].clear()
 
 #####################################################################
 

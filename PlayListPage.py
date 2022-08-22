@@ -6,20 +6,27 @@ class PlayListPage:
     def __init__(self,ui,id):
         self.db=DataBase.DataBase()
         self.ui=ui
-        self.id=id
-        self.ui.playListPageBackBtn.clicked.connect(self.backMove)
-        self.ui.playListPageAddBtn.clicked.connect(self.AddList)
+        self.id=str(id)
         
         self.PlayListPrint()
 
     def PlayListBtnEvent(self):
+        self.ui.playListPageBackBtn.mousePressEvent= lambda event: self.backMove()
+        self.ui.playListPageAddBtn.mousePressEvent=  lambda event: self.AddList()
         for i in range(0,self.ui.PlayListNum):
-            self.ui.PlayPageMoveToVideoList[i].clicked.connect(lambda event, nowIndex=i : self.MoveToVideoPage(nowIndex))
-            self.ui.PlayPageChangeBtnList[i].clicked.connect(lambda event, nowIndex=i : self.ChangeClickEvent(nowIndex))
-            self.ui.PlayPageDeleteBtnList[i].clicked.connect(lambda event, nowIndex=i : self.DeleteClickEvent(nowIndex))
+            self.ui.PlayPageMoveToVideoList[i].mousePressEvent = lambda event, nowIndex=i : self.MoveToVideoPage(nowIndex)
+            self.ui.PlayPageChangeBtnList[i].mousePressEvent = lambda event, nowIndex=i : self.ChangeClickEvent(nowIndex)
+            self.ui.PlayPageDeleteBtnList[i].mousePressEvent = lambda event, nowIndex=i : self.DeleteClickEvent(nowIndex)
 
     def backMove(self):
         self.ui.stackedWidget.setCurrentWidget(self.ui.LoginPage)
+        self.ui.playListPageBackBtn.mousePressEvent=  None
+        self.ui.playListPageAddBtn.mousePressEvent= None
+        for i in range(0,self.ui.PlayListNum):
+            self.ui.PlayPageMoveToVideoList[i].mousePressEvent =  None
+            self.ui.PlayPageChangeBtnList[i].mousePressEvent =  None
+            self.ui.PlayPageDeleteBtnList[i].mousePressEvent =  None
+        
 
     def PlayListPrint(self):
         self.listname=[]
@@ -30,7 +37,6 @@ class PlayListPage:
             self.listname.append(self.result[i][2])
         self.ui.PlayListBtn(self.listname)
         self.PlayListBtnEvent()
-        
     
     def AddList(self):
         text="추가하실 재생목록의 이름을 작성해주세요"
@@ -42,8 +48,6 @@ class PlayListPage:
             print(self.result)
             if len(self.text)<20:
                 if len(self.result)==0:
-                    print(self.ui.PlayListNum)
-                    print(self.result)
                     self.db.insert("playlist",["id","listname"],[self.id,self.text])
                     self.ui.PlayListNum+=1
                     self.ui.resultDialog("추가에 성공하셨습니다")
@@ -54,7 +58,6 @@ class PlayListPage:
                 self.ui.resultDialog("재생목록의 길이는 20자 미만입니다.")
 
     def DeleteClickEvent(self,index):
-
         self.ui.DeleteDialog("플레이리스트를 삭제하시겠습니까?")
         if self.ui.retval == QtWidgets.QMessageBox.Ok :
             self.ui.PlayListNum-=1
@@ -63,6 +66,7 @@ class PlayListPage:
             del self.ui.PlayPageChangeBtnList[index]
             listname=self.result[index][2]
             self.db.delete("playlist",["id","listname"],[self.id,listname])
+            self.db.delete("videolist",["numfromplaylist"],[self.result[index][0]])
             self.ui.resultDialog("삭제 성공했습니다.")
             self.PlayListPrint()
         
@@ -81,8 +85,7 @@ class PlayListPage:
                 
                 if len(self.resultListName)==0:
                     listname=self.result[index][2]
-                    self.db.update("playlist",["listname","id","listname"],[listname,self.id,self.text])
-                    self.db.update("videolist",["id","listname","listname"],[self.id,listname,self.text])
+                    self.db.update("playlist",["listname"],["id","listname"],[self.text,self.id,listname])
                     self.ui.PlayPageMoveToVideoList[index].setText(self.text)
                     self.ui.resultDialog("수정에 성공하셨습니다")
                     self.PlayListPrint()
@@ -92,8 +95,7 @@ class PlayListPage:
                 self.ui.resultDialog("재생목록의 길이는 20자 미만입니다.")
 
     def MoveToVideoPage(self,index):
-        self.listname=self.result[index][2]
-        print(self.listname)
-        self.referVideoListPage=VideoListPage.VideoListPage(self.ui, self.id, self.listname)
+        self.listnum=self.result[index][0]
+        print(self.listnum)
+        self.referVideoListPage=VideoListPage.VideoListPage(self.ui, self.listnum)
         self.ui.stackedWidget.setCurrentWidget(self.ui.VideoListPage)
-

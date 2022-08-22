@@ -8,7 +8,7 @@ class FindPage:
         self.info=[]        
         
         for index in range(0, len(self.ui.FindPageBtnList)):
-            self.ui.FindPageBtnList[index].clicked.connect(lambda event, nowIndex=index : self.clickEvent(nowIndex))
+            self.ui.FindPageBtnList[index].mousePressEvent=lambda event, nowIndex=index : self.clickEvent(nowIndex)
 
     def clickEvent(self,index):
         if index==0:
@@ -17,6 +17,8 @@ class FindPage:
             self.findPw()
         elif index==2:
             self.ui.stackedWidget.setCurrentWidget(self.ui.LoginPage)
+            for index in range(0, len(self.ui.FindPageBtnList)):
+                self.ui.FindPageBtnList[index].mousePressEvent= None
 
     def findId(self):
         for i in range(0,len(self.ui.FindIdPageLabelNameList)):

@@ -5,51 +5,63 @@ import DataBase
 import requests
 from bs4 import BeautifulSoup
 import urllib.request 
+import vlc
 import pafy
 from PyQt5.QtGui import*
 import VideoPlay
 
 class VideoListPage:
-    def __init__(self,ui,id,listname):
+    def __init__(self,ui,listnum):
         self.db=DataBase.DataBase()
         self.ui=ui
-        self.id=id
-        self.listname=listname
+        self.listnum=listnum
+        self.linkname=[]
+        self.imagelink=[]
+        self.referVideoPlay=VideoPlay.VideoPlay(None,None,None)
+
+        self.VideoListPrint()
+            
+        
+
+    def backMove(self):
+
+        self.ui.stackedWidget.setCurrentWidget(self.ui.PlayListPage)
+        self.referVideoPlay.VideoControlEvent(1)
+        self.ui.VideoListPageBackBtn.mousePressEvent=None
+        self.ui.VideoListPageAddBtn.mousePressEvent = None
+
+        for i in range(0,len(self.ui.VideoPlayBtnNameList)):
+            self.ui.VideoPlayBtnList[i].mousePressEvent=None
+            
+        for i in range(0,self.ui.VideoListNum):
+            self.ui.VideoPageList[i].mousePressEvent=None
+            self.ui.VideoPageDeleteBtnList[i].mousePressEvent=None
+        
+
+    def VideoListPrint(self):
+
         self.linkname=[]
         self.imagelink=[]
 
-        self.VideoListPrint()
-
-        self.ui.VideoListPageBackBtn.clicked.connect(self.backMove)
-        self.ui.VideoListPageAddBtn.clicked.connect(self.AddList)
-
-        for i in range(0,len(self.ui.VideoPlayBtnNameList)):
-            try:    
-                self.ui.VideoPlayBtnList[i].clicked.connect(lambda event, nowIndex=i : self.referVideoPlay.PlayStopVideo(nowIndex))
-            except :
-                self.ui.resultDialog("재생할 영상을 먼저 선택해 주세요")
-
-        for i in range(0,self.ui.VideoListNum):
-            self.ui.VideoPageList[i].clicked.connect(lambda event, nowIndex=i : self.Play(nowIndex))
-            self.ui.VideoPageDeleteBtnList[i].clicked.connect(lambda event, nowIndex=i : self.DeleteClickEvent(nowIndex))
-
-    def backMove(self):
-        self.ui.stackedWidget.setCurrentWidget(self.ui.PlayListPage)
-
-    def VideoListPrint(self):
-        
-        self.result=self.db.read("videolist",["id","listname"],[self.id,self.listname])
+        self.result=self.db.read("videolist",["numfromplaylist"],[self.listnum])
         print(self.result)
         
         for i in range(0,len(self.result)):
-            self.linkname.append(self.result[i][4])
-            
-            self.imageFromWeb = urllib.request.urlopen(self.result[i][3]).read()
-            self.imagelink.append(self.imageFromWeb)
+            self.linkname.append(self.result[i][3])
+            self.imagelink.append(self.result[i][4])
 
         self.ui.VideoListNum=len(self.result)
         self.ui.VideoListBtn(self.linkname,self.imagelink)
 
+        self.ui.VideoListPageBackBtn.mousePressEvent= lambda event: self.backMove()
+        self.ui.VideoListPageAddBtn.mousePressEvent = lambda event: self.AddList()
+
+        for i in range(0,self.ui.VideoListNum):
+            self.ui.VideoPageList[i].mousePressEvent= lambda event, nowIndex=i : self.setVideo(nowIndex)
+            self.ui.VideoPageDeleteBtnList[i].mousePressEvent=lambda event, nowIndex=i : self.DeleteClickEvent(nowIndex)
+
+        for i in range(0,len(self.ui.VideoPlayBtnNameList)):
+            self.ui.VideoPlayBtnList[i].mousePressEvent= lambda event, nowIndex=i : self.referVideoPlay.VideoControlEvent(nowIndex)
 
     def AddList(self):
         try:
@@ -60,19 +72,20 @@ class VideoListPage:
 
                 self.url=self.ui.input
                 video=pafy.new(self.url)
+                videoTime=int(video.duration[0])*36000+int(video.duration[1])*3600+int(video.duration[3])*600+int(video.duration[4])*60+int(video.duration[6])*10+int(video.duration[7])
                 name=f"{video.title}"
-                self.result=self.db.read("videolist",["listname","listlink"],[self.listname,self.url])
-                
-                
+                self.result=self.db.read("videolist",["numfromplaylist","listlink"],[self.listnum,self.url])
+                print(self.result)
                 if len(self.result)==0:
-                    if len(name)>25:
-                        name=name[:24]+"..."
-                    self.linkname.append(self.url)
-                    self.imageFromWeb = urllib.request.urlopen(self.url).read()
-                    
-                    self.imagelink.append(self.imageFromWeb)
+                    if len(name)>20:
+                        name=name[:19]+"..."
+                    self.linkname.append(name)
+                    self.iimage=video.getbestthumb()
+                    self.imageFromWeb=video.getbestthumb() +".jpg"
+                    print(self.imageFromWeb)
+                    self.imagelink.append(self.iimage)
 
-                    self.db.insert("videolist",["id","listname","listlink","linkname"],[self.id,self.listname,self.url,name])
+                    self.db.insert("videolist",["numfromplaylist","listlink","linkname","imagelink","videotime"],[self.listnum,self.url,name,self.imageFromWeb,videoTime])
                     self.ui.VideoListNum+=1
                     self.ui.resultDialog("추가에 성공하셨습니다")
                     self.VideoListPrint()
@@ -92,16 +105,39 @@ class VideoListPage:
             del self.ui.VideoPageList[index]
             del self.ui.VideoPageDeleteBtnList[index]
             del self.ui.VideoListPicList[index]
-            listlink=self.result[index][3]
-            self.db.delete("videolist",["listname","listlink"],[self.listname,listlink])
+            self.db.delete("videolist",["num"],[self.result[index][0]])
             self.ui.resultDialog("삭제 성공했습니다.")
             self.VideoListPrint()
         
         elif self.ui.retval == QtWidgets.QMessageBox.Cancel:
             self.ui.resultDialog("삭제하지 않습니다.")
 
-    def Play(self,index):
-        self.result=self.db.read("videolist",["listname"],[self.listname])
-        url=self.result[index][3]
+
+    def setVideo(self,index):
+        
+        self.result=self.db.read("videolist",["numfromplaylist"],[self.listnum])
+        url=self.result[index][2]
+        time=self.result[index][5]
         print(url)
-        self.referVideoPlay=VideoPlay.VideoPlay(self.ui,url)
+
+        try:
+            video=pafy.new(url)
+        except:
+            pass
+        #최고의 해상도
+        best = video.getbest()
+        videourl = best.url
+
+        vlcInstance = vlc.Instance()
+        self.player = vlcInstance.media_player_new()
+        Media = vlcInstance.media_new(videourl)
+        #get_mrl -> mp4
+        Media.get_mrl()
+        self.player.set_media(Media)
+        #videoplay frame/label set
+        self.player.set_hwnd(self.ui.videoPlay.winId())
+        self.referVideoPlay=VideoPlay.VideoPlay(self.player,time,index)
+        self.referVideoPlay.start()
+
+    
+
